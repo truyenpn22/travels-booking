@@ -1,24 +1,57 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import loginImg from "../assets/images/login.png";
 import userIcon from "../assets/images/user.png";
 import "../styles/login.css";
 import { Button, Col, Container, Form, FormGroup, Row } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "./../context/AuthContext";
+import { BASE_URL } from "./../utils/config";
+import { toast } from "react-toastify";
 
 const Login = () => {
-
   const [credentials, setCredentials] = useState({
-    email:undefined,
-    password:undefined
+    email: undefined,
+    password: undefined,
   });
+
+  const { dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleClick = (e) => {
-    e.prevenDefault()
-  }
+  const handleClick = async (e) => {
+    e.preventDefault();
+    dispatch({ type: "LOGIN_START" });
+
+    try {
+      const res = await fetch(`${BASE_URL}/auth/login`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (!res.ok) {
+        const result = await res.json();
+        throw new Error(result.message);
+      }
+
+      const result = await res.json();
+      dispatch({ type: "LOGIN_SUCCESS", payload: result.data });
+      navigate("/");
+      toast.success("Logged in successfully", {
+        autoClose: 1500,
+      });
+    } catch (err) {
+      dispatch({ type: "LOGIN_FAILURE", payload: err.message });
+      toast.error("Account does not exist", {
+        autoClose: 1500,
+      });
+    }
+  };
 
   return (
     <section>
@@ -49,14 +82,20 @@ const Login = () => {
                       type="password"
                       placeholder="Password"
                       required
-                      id="email"
+                      id="password"
                       onChange={handleChange}
                     />
                   </FormGroup>
-                  <Button className="btn secondary__btn auth__btn" type="submit">Login</Button>
-
+                  <Button
+                    className="btn secondary__btn auth__btn"
+                    type="submit"
+                  >
+                    Login
+                  </Button>
                 </Form>
-                <p>Don't have an account?<Link to='/register'>Create</Link></p>
+                <p>
+                  Don't have an account?<Link to="/register">Create</Link>
+                </p>
               </div>
             </div>
           </Col>

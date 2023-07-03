@@ -18,7 +18,7 @@ const corOptions = {
 }
 
 //database connection
-mongoose.set("strictQuery", false);
+
 const connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {

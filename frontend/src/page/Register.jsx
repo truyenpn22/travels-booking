@@ -1,25 +1,56 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import registerImg from "../assets/images/register.png";
 import userIcon from "../assets/images/user.png";
 import "../styles/login.css";
 import { Button, Col, Container, Form, FormGroup, Row } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "./../context/AuthContext";
+import { BASE_URL } from "./../utils/config";
+import { toast } from "react-toastify";
 
 const Register = () => {
-
   const [credentials, setCredentials] = useState({
-    username:undefined,
-    email:undefined,
-    password:undefined
+    username: undefined,
+    email: undefined,
+    password: undefined,
   });
+
+  const { dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleClick = (e) => {
-    e.prevenDefault()
-  }
+  const handleClick = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(`${BASE_URL}/auth/register`, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.message);
+      }
+
+      dispatch({ type: "REGISTER_SUCCESS" });
+      toast.success("Sign Up Success", {
+        autoClose: 1500,
+      });
+      navigate("/login");
+    } catch (err) {
+      toast.error(err.message, {
+        autoClose: 1500,
+      });
+    }
+  };
 
   return (
     <section>
@@ -36,21 +67,21 @@ const Register = () => {
                 </div>
                 <h2>Register</h2>
                 <Form onSubmit={handleClick}>
-                <FormGroup>
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      required
-                      id="email"
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
                   <FormGroup>
                     <input
                       type="text"
                       placeholder="Username"
                       required
                       id="username"
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      required
+                      id="email"
                       onChange={handleChange}
                     />
                   </FormGroup>
@@ -63,10 +94,16 @@ const Register = () => {
                       onChange={handleChange}
                     />
                   </FormGroup>
-                  <Button className="btn secondary__btn auth__btn" type="submit">Create Account</Button>
-
+                  <Button
+                    className="btn secondary__btn auth__btn"
+                    type="submit"
+                  >
+                    Create Account
+                  </Button>
                 </Form>
-                <p>Alrealy have an account?<Link to='/login'>Login</Link></p>
+                <p>
+                  Alrealy have an account?<Link to="/login">Login</Link>
+                </p>
               </div>
             </div>
           </Col>
