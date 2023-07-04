@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -8,18 +9,23 @@ import userRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js";
 import reviewRoute from "./routes/reviews.js";
 import bookRoute from "./routes/booking.js";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+
 
 dotenv.config();
 const app = express();
 const corOptions = {
-  origin:true, 
-  credentials:true,            //access-control-allow-credentials:true
-  optionSuccessStatus:200,
-}
+  origin: true,
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
 
 const port = process.env.PORT || 8000;
 
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 //database connection
 
 const connect = async () => {
@@ -45,7 +51,11 @@ app.use("/api/v1/review", reviewRoute);
 app.use("/api/v1/booking", bookRoute);
 
 
+app.use(express.static(join(__dirname, "/frontend/build")));
 
+app.get("*", (req, res) =>
+  res.sendFile(join(__dirname, "/frontend/build/index.html"))
+);
 
 
 app.listen(port, () => {
