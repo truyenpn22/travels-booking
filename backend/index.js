@@ -8,12 +8,7 @@ import userRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js";
 import reviewRoute from "./routes/reviews.js";
 import bookRoute from "./routes/booking.js";
-import { fileURLToPath } from "url";
-import path,{ dirname } from "path";
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 dotenv.config();
 const app = express();
@@ -24,7 +19,6 @@ const corOptions = {
 };
 
 const port = process.env.PORT || 8000;
-
 
 //database connection
 
@@ -49,13 +43,6 @@ app.use("/api/v1/tours", tourRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/review", reviewRoute);
 app.use("/api/v1/booking", bookRoute);
-
-
-app.use(express.static(path.join(__dirname, '/frontend/build')));
-app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
-);
-
 
 app.listen(port, () => {
   connect();
