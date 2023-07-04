@@ -24,8 +24,7 @@ const corOptions = {
 
 const port = process.env.PORT || 8000;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
 //database connection
 
 const connect = async () => {
@@ -51,11 +50,7 @@ app.use("/api/v1/review", reviewRoute);
 app.use("/api/v1/booking", bookRoute);
 
 
-app.use(express.static(join(__dirname, "/frontend/build")));
 
-app.get("*", (req, res) =>
-  res.sendFile(join(__dirname, "/frontend/build/index.html"))
-);
 
 
 app.listen(port, () => {
