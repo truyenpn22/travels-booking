@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useContext } from "react";
 import { Container, Row, Button } from "reactstrap";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/images/logo.png";
 import "./header.css";
 import { AuthContext } from "./../../context/AuthContext";
 import { toast } from "react-toastify";
@@ -22,6 +21,8 @@ const navLinks = [
 ];
 const Header = () => {
   const headerRef = useRef(null);
+  const menuRef = useRef(null)
+
   const navigate = useNavigate();
   const { user, dispatch } = useContext(AuthContext);
 
@@ -49,16 +50,19 @@ const Header = () => {
     stickyHeaderFunc();
     return window.removeEventListener("scroll", stickyHeaderFunc);
   });
+
+  const toggleMenu = () => menuRef.current.classList.toggle('show__menu')
+
   return (
     <header className="header" ref={headerRef}>
       <Container>
         <Row>
           <div className="nav__wrapper d-flex align-items-center justify-content-between">
-            <div className="logo">
-              <img src={logo} alt="" />
+            <div className="logo" >
+            <h1 class="m-0 d-flex" style={{color:"#1B9C85"}}><i class="ri-map-pin-fill me-0"></i>Tourist</h1>
             </div>
 
-            <div className="navigation">
+            <div className="navigation" ref={menuRef} onClick={toggleMenu}>
               <ul className="menu d-flex align-items-center gap-5">
                 {navLinks.map((item, index) => (
                   <li className="nav__item" key={index}>
@@ -76,10 +80,10 @@ const Header = () => {
             </div>
 
             <div className="nav_right d-flex align-items-center gap-4">
-              <div className="nav-btns d-flex align-items-center gap-4">
+              <div className="nav-btns d-flex align-items-center gap-2">
                 {user ? (
                   <>
-                    <h5 className="mb-0 text-capitalize">
+                    <h5 className="mb-0 text-capitalize text-header">
                       Hello, {user.username}
                     </h5>
                     <Button className="btn btn-dark" onClick={logout}>
@@ -98,7 +102,7 @@ const Header = () => {
                 )}
               </div>
 
-              <span className="mobile__menu">
+              <span className="mobile__menu" onClick={toggleMenu}>
                 <i className="ri-menu-line"></i>
               </span>
             </div>

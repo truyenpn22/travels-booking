@@ -1,33 +1,69 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./booking.css";
 import { Button, Form, FormGroup, ListGroup, ListGroupItem } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../utils/config";
+import { AuthContext } from "../../context/AuthContext";
+
+import { toast } from 'react-toastify';
 
 const Booking = ({ tour, avgRating }) => {
-  const { price, reviews } = tour;
+  const { price, reviews, title } = tour;
+
+  
 
   const navigate = useNavigate()
 
-  const [credentials, setCredentials] = useState({
-    userId: "01",
-    userEmail: "example@gmail.com",
-    fullname: "",
-    phone: "",
-    gusetSize: 2,
-    bookAt: "",
-  });
+  const { user } = useContext(AuthContext);
 
-  const serviceFee = 10;
-  const totalAmout =
-    Number(price) * Number(credentials.gusetSize) + Number(serviceFee);
+  const [booking, setBooking] = useState({
+    userId: user && user._id,
+    userEmail: user && user.email,
+    tourName: title,
+    fullName: '',
+    phone: '',
+    guestSize: 1,
+    bookAt: ''
+ })
 
-  const handleChange = (e) => {
-    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
-  };
+
+
+ const handleChange = e => {
+    setBooking(prev => ({ ...prev, [e.target.id]: e.target.value }))
+ }
+
+ const serviceFee = 10
+ const totalAmount = Number(price) * Number(booking.guestSize) + Number(serviceFee)
+
+
   // sent data to the server
-  const handleClick = (e) => {
+  const handleClick = async(e) => {
     e.preventDefault();
-    navigate('/thank-you')
+    
+    try {
+      if (!user || user === undefined || user === null) {
+        toast.error("Please sign in");
+      }
+
+      const res = await fetch(`${BASE_URL}/booking`, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(booking),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        return toast.error(result.message);
+      }
+      toast.success('Order Success')
+      navigate('/thank-you')
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <div className="booking">
@@ -49,14 +85,14 @@ const Booking = ({ tour, avgRating }) => {
             <input
               type="text"
               placeholder="Full Name"
-              id="fullname"
+              id="fullName"
               required
               onChange={handleChange}
             />
           </FormGroup>
           <FormGroup>
             <input
-              type="text"
+              type="number"
               placeholder="Phone"
               id="phone"
               required
@@ -65,16 +101,15 @@ const Booking = ({ tour, avgRating }) => {
           </FormGroup>
           <FormGroup className="d-flex align-items-center gap-1">
             <input
-              type="date"
-              placeholder=""
+              type='date'
               id="bookAt"
               required
-              onChange={handleChange}
+              onChange={handleChange}  
             />
             <input
               type="number"
               placeholder="Guest"
-              id="gusetSize"
+              id="guestSize"
               required
               onChange={handleChange}
             />
@@ -96,7 +131,7 @@ const Booking = ({ tour, avgRating }) => {
           </ListGroupItem>
           <ListGroupItem className="total border-0 px-0">
             <h5>Total</h5>
-            <span>${totalAmout}</span>
+            <span>${totalAmount}</span>
           </ListGroupItem>
         </ListGroup>
         <Button className="btn primary__btn w-100 mt-4" onClick={handleClick}>

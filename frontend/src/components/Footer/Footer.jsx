@@ -44,8 +44,8 @@ const Footer = () => {
         <Row>
           <Col lg="3">
             <div className="logo">
-              <img src={logo} alt="Footer" />
-              <p>Lorem ipsum dolor sit amet consectetur.</p>
+            <h1 class="m-0 d-flex" style={{color:"#1B9C85"}}><i class="ri-map-pin-fill me-0"></i>Tourist</h1>
+            <span>Lorem ipsum dolor sit amet consectetur.</span>
               <div className="social__links d-flex align-items-center gap-4">
                 <span>
                   <Link to="#">
@@ -94,7 +94,7 @@ const Footer = () => {
             <h5 className="footer__link-title">Contact</h5>
             <ListGroup className="footer__quick-links">
               <ListGroupItem className="ps-0 border-0">
-                <h6>
+                <h6 className="d-flex gap-1">
                   <span>
                     <i className="ri-map-pin-line"></i>
                   </span>
@@ -105,9 +105,9 @@ const Footer = () => {
             </ListGroup>
             <ListGroup className="footer__quick-links">
               <ListGroupItem className="ps-0 border-0">
-                <h6>
+                <h6 className="d-flex gap-1">
                   <span>
-                    <i className="ri-email-line"></i>
+                  <i className="ri-mail-line"></i>
                   </span>
                   Email:
                 </h6>
@@ -116,13 +116,13 @@ const Footer = () => {
             </ListGroup>
             <ListGroup className="footer__quick-links">
               <ListGroupItem className="ps-0 border-0">
-                <h6>
+                <h6 className="d-flex gap-1">
                   <span>
                     <i className="ri-phone-fill"></i>
                   </span>
-                  Address
+                  Phone: 
                 </h6>
-                <p className="mb-0">+81 1900888222</p>
+                <p className="mb-0"> +81 1900888222</p>
               </ListGroupItem>
             </ListGroup>
           </Col>

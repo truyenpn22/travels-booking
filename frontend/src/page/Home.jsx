@@ -5,7 +5,7 @@ import heroImg from "../assets/images/hero-img01.jpg";
 import heroImg02 from "../assets/images/hero-img02.jpg";
 import heroVideo from "../assets/images/hero-video.mp4";
 import worldImg from "../assets/images/world.png";
-import experienceImg from "../assets/images/experience.png";
+import experienceImg from "../assets/images/logo8.png";
 import Subtitle from "./../shared/Subtitle";
 import SearchBar from "../shared/SearchBar";
 import ServiceList from "../services/ServiceList";
@@ -42,7 +42,7 @@ const Home = () => {
               </div>
             </Col>
             <Col lg="2">
-              <div className="hero__img-box mt-4">
+              <div className="hero__img-box hero__video-box mt-4">
                 <video src={heroVideo} alt="video" controls />
               </div>
             </Col>

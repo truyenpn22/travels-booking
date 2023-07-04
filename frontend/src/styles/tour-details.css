@@ -116,3 +116,24 @@
 .review__item span {
     font-weight: 500;
 }
+
+.tour__extra-details span i {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+}
+
+/* =============== RESPONSIVE ================ */
+@media only screen and (max-width: 768px) {
+    .tour__extra-details {
+       flex-wrap: wrap;
+       row-gap: 1rem;
+    }
+ 
+    .tour__extra-details span {
+       font-size: 0.9rem;
+    }
+ 
+    .tour__extra-details span i {
+       font-size: 1rem;
+    }
+ }  
