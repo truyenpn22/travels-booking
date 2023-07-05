@@ -17,6 +17,7 @@ const corOptions = {
   origin: true,
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
+  method: ["POST", "GET"]
 };
 
 const port = process.env.PORT || 4000;
