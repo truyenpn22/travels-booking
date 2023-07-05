@@ -14,7 +14,7 @@ import bookRoute from "./routes/booking.js";
 dotenv.config();
 const app = express();
 const corOptions = {
-  origin: true,
+  origin: ["https://travels-booking.vercel.app/"],
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
   method: ["POST", "GET"]
