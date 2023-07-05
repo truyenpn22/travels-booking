@@ -13,13 +13,13 @@ import bookRoute from "./routes/booking.js";
 
 dotenv.config();
 const app = express();
+const port = process.env.PORT || 4000;
 const corOptions = {
   origin: true,
   credentials: true, 
-  optionSuccessStatus: 200,
 };
 
-const port = process.env.PORT || 4000;
+
 
 //database connection
 
