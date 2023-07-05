@@ -14,10 +14,9 @@ import bookRoute from "./routes/booking.js";
 dotenv.config();
 const app = express();
 const corOptions = {
-  origin: ["https://travels-booking.vercel.app/"],
+  origin: true,
   credentials: true, 
   optionSuccessStatus: 200,
-  method: ["POST", "GET"]
 };
 
 const port = process.env.PORT || 4000;
@@ -46,12 +45,6 @@ app.use("/api/v1/users", userRoute);
 app.use("/api/v1/review", reviewRoute);
 app.use("/api/v1/booking", bookRoute);
 
-var __dirname = path.resolve()
-
-app.use(express.static(path.join(__dirname, './frontend/build')));
-app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, './frontend/build/index.html'))
-);
 
 
 
